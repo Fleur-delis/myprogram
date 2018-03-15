@@ -1,0 +1,22 @@
+import requests
+from bs4 import BeautifulSoup
+import re
+res = requests.get('http://news.sina.com.cn/c/nd/2018-03-15/doc-ifyshsze4394565.shtml')
+res.encoding='utf-8'
+soup = BeautifulSoup(res.text,'html.parser')
+title = soup.select('.main-title')[0].text
+print(title)
+for news in soup.select('.top-bar ani'):
+    time = news.select('date-source')[0].contents[0]
+    source = soup.select('date-source')[0].contents[1].text
+print(time)
+print('来源：'+source)
+articles=[]
+for new in soup.select('.article p')[:-1]:
+    articles.append(new.text.strip())
+print('\n'.join(articles))
+for name in soup.select('.article'):
+    print(name.select('.show_author')[0].text)
+newsurl = 'http://news.sina.com.cn/c/nd/2018-03-15/doc-ifyshsze4394565.shtml'
+news_id = re.search('doc-i(.+).shtml',newsurl)  
+print('新闻id:'+news_id.group(1))
