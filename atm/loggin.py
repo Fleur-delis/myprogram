@@ -1,4 +1,5 @@
 import pymysql
+from user_information import user_information
 
 def new_user():
     username = input('请输入您的用户名：')
@@ -10,7 +11,7 @@ def new_user():
             print('两次密码不相同，请重新确认!')
         else:
             flag=False
-    conn = pymysql.connect(host='localhost', port=3306, user='root', password='zst15122172253', db='atm旧代码')
+    conn = pymysql.connect(host='localhost', port=3306, user='root', password='zst15122172253', db='atm')
     cur = conn.cursor()
     cur.execute("insert into loggin(username,password)  values(\'%s\',\'%s\')" % (username,password))
     cur.close()
@@ -22,7 +23,7 @@ def user_loggin():
     username_ = input('请输入您的用户名：')
     flag_1=True
     while flag_1:
-        conn = pymysql.connect(host='localhost', port=3306, user='root', password='zst15122172253', db='atm旧代码')
+        conn = pymysql.connect(host='localhost', port=3306, user='root', password='zst15122172253', db='atm')
         cur = conn.cursor()
         name_count = cur.execute('select username from loggin')
         all_username = cur.fetchmany(name_count)
@@ -36,6 +37,7 @@ def user_loggin():
                     print('您输入的密码有误！请重新输入！')
                 else:
                     print('登陆成功！')
+                    user_information(username_)
                     cur.close()
                     conn.close()
                     flag_1=False
@@ -43,16 +45,16 @@ def user_loggin():
         if flag_2==0:
             print('该用户不存在，请先注册！')
             return  False
-
-while True:
-    choose = input('1.新用户注册\n'
-                '2.已有用户登录')
-    if(choose=='1'):
-        new_user()
-    elif(choose=='2'):
-        if user_loggin():
-            break
-    else:
-        print('您的输入有误。请重新输入')
+def loggin():
+    while True:
+        choose = input('1.新用户注册\n'
+                    '2.已有用户登录\n')
+        if(choose=='1'):
+            new_user()
+        elif(choose=='2'):
+            if user_loggin():
+                break
+        else:
+            print('您的输入有误。请重新输入')
 
 
